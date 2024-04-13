@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-
+@available(macOS 11, *)
 @main
 struct SnakeApp: App {
     var body: some Scene {
