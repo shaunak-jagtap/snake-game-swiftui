@@ -15,7 +15,8 @@ let package = Package(
     ],
     targets: [
         .target(
-            name: "SnakeGame"
+            name: "SnakeGame",
+            path: "Sources"
         )
     ]
 )
