@@ -13,16 +13,9 @@ let package = Package(
             targets: ["SnakeGame"]
         ),
     ],
-    dependencies: [],
     targets: [
         .target(
-            name: "SnakeGame",
-            dependencies: []
-        ),
-        .testTarget(
-            name: "SnakeGameTests",
-            dependencies: ["SnakeGame"]
-        ),
+            name: "SnakeGame"
+        )
     ]
 )
-
