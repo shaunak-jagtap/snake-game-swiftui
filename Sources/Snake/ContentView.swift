@@ -4,6 +4,7 @@ import SwiftUI
 let gridSize: CGFloat = 20
 
 // Main view representing the game
+@available(macOS 10.15, *)
 struct SnakeGameView: View {
     @StateObject var viewModel = SnakeGameViewModel()
     @available(macOS 10.15, *)
@@ -186,6 +187,7 @@ class SnakeGameViewModel: ObservableObject {
 }
 
 // Model representing a segment of the snake
+@available(macOS 10.15, *)
 struct SnakeSegment: Hashable {
     var position: CGPoint
     
@@ -205,6 +207,7 @@ enum Direction {
 }
 
 // View representing the snake's eyes
+@available(macOS 10.15, *)
 struct SnakeEyes: View {
     var position: CGPoint
     var direction: Direction
