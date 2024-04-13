@@ -16,12 +16,7 @@ let package = Package(
     targets: [
         .target(
             name: "SnakeGame",
-            path: "Sources"
-        ),
-        .testTarget(
-            name: "SnakeGameTests",
-            dependencies: ["SnakeGame"],
-            path: "Tests"
-        ),
+            path: "/"
+        )
     ]
 )
