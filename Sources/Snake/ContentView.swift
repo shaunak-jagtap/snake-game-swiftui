@@ -1,4 +1,5 @@
 import SwiftUI
+import UIKit
 
 // Constants for game settings
 let gridSize: CGFloat = 20
@@ -130,7 +131,7 @@ class SnakeGameViewModel: ObservableObject {
         }
         
         var head = snake.first!
-        let tail = snake.last!
+        let _ = snake.last!
         
         switch direction {
         case .up:
