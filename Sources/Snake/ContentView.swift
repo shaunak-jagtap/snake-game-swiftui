@@ -6,7 +6,7 @@ let gridSize: CGFloat = 20
 // Main view representing the game
 struct SnakeGameView: View {
     @StateObject var viewModel = SnakeGameViewModel()
-    
+    @available(macOS 10.15, *)
     var body: some View {
         VStack {
             Text("Score: \(viewModel.score)")
@@ -59,6 +59,7 @@ struct SnakeGameView: View {
 }
 
 // ViewModel to manage game logic
+@available(macOS 10.15, *)
 class SnakeGameViewModel: ObservableObject {
     @Published var snake: [SnakeSegment] = []
     @Published var food: SnakeSegment = SnakeSegment(position: .zero)
