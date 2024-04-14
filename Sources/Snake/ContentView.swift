@@ -1,5 +1,4 @@
 import SwiftUI
-import UIKit
 
 // Constants for game settings
 let gridSize: CGFloat = 20
