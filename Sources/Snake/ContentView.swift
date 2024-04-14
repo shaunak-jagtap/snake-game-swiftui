@@ -128,7 +128,7 @@ class SnakeGameViewModel: ObservableObject {
         }
     }
     
-    private func moveSnake() {
+    public func moveSnake() {
         guard !snake.isEmpty else {
             return
         }
@@ -167,7 +167,7 @@ class SnakeGameViewModel: ObservableObject {
         }
     }
     
-    private func generateFood() {
+    public func generateFood() {
       var availablePositions = [(CGFloat, CGFloat)]()
       for x in stride(from: gridSize, through: gameWidth - gridSize, by: gridSize) { // Start from gridSize to avoid border
         for y in stride(from: gridSize, through: gameHeight - gridSize, by: gridSize) { // Start from gridSize to avoid border

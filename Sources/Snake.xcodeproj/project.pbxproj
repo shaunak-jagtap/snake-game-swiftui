@@ -52,19 +52,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		AA804AF52BCBDAE100E08942 /* SnakeTests */ = {
+		AA804AF52BCBDAE100E08942 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
 				AA804AF62BCBDAE100E08942 /* SnakeTests.swift */,
 			);
-			path = SnakeTests;
+			path = Tests;
 			sourceTree = "<group>";
 		};
 		AAA57D582BB24254008CD086 = {
 			isa = PBXGroup;
 			children = (
 				AAA57D632BB24254008CD086 /* Snake */,
-				AA804AF52BCBDAE100E08942 /* SnakeTests */,
+				AA804AF52BCBDAE100E08942 /* Tests */,
 				AAA57D622BB24254008CD086 /* Products */,
 			);
 			sourceTree = "<group>";
