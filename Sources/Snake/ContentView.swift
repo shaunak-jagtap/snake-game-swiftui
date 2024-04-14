@@ -7,11 +7,12 @@ let gridSize: CGFloat = 20
 @available(macOS 10.15, *)
 struct SnakeGameView: View {
     @StateObject var viewModel = SnakeGameViewModel()
-    @available(macOS 10.15, *)
+    
     var body: some View {
         GeometryReader { geometry in
             let calculatedGameWidth = geometry.size.width - 40
             let calculatedGameHeight = geometry.size.height - 200
+            
             VStack {
                 Text("Score: \(viewModel.score)")
                     .foregroundColor(.white)
@@ -167,20 +168,22 @@ class SnakeGameViewModel: ObservableObject {
     }
     
     private func generateFood() {
-        var randomX = CGFloat.random(in: 0...(gameWidth - gridSize))
-        var randomY = CGFloat.random(in: 0...(gameHeight - gridSize))
-
-        randomX = round(randomX / gridSize) * gridSize
-        randomY = round(randomY / gridSize) * gridSize
-
-        while snake.contains(where: { $0.position == CGPoint(x: randomX, y: randomY) }) {
-            randomX = CGFloat.random(in: 0...(gameWidth - gridSize))
-            randomY = CGFloat.random(in: 0...(gameHeight - gridSize))
-            randomX = round(randomX / gridSize) * gridSize
-            randomY = round(randomY / gridSize) * gridSize
+      var availablePositions = [(CGFloat, CGFloat)]()
+      for x in stride(from: gridSize, through: gameWidth - gridSize, by: gridSize) { // Start from gridSize to avoid border
+        for y in stride(from: gridSize, through: gameHeight - gridSize, by: gridSize) { // Start from gridSize to avoid border
+          let position = CGPoint(x: x, y: y)
+            if !snake.contains(where: { $0.position == position }) && position.x > gridSize && position.y > 100 {
+            availablePositions.append((x, y))
+          }
         }
-
-        food.position = CGPoint(x: randomX, y: randomY)
+      }
+      
+      if let randomPosition = availablePositions.randomElement() {
+        food.position = CGPoint(x: randomPosition.0, y: randomPosition.1)
+      } else {
+        // Handle the case where no free positions are available (snake might fill most of the board)
+        print("No available positions for food!")
+      }
     }
 
     private func endGame() {
