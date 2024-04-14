@@ -6,30 +6,63 @@
 //
 
 import XCTest
+@testable import Snake
 
 final class SnakeTests: XCTestCase {
 
+    var viewModel: SnakeGameViewModel!
+    let gameWidth: CGFloat = 300
+    let gameHeight: CGFloat = 400
+    
     override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+        // Initialize the view model with mock data
+        viewModel = SnakeGameViewModel()
+        viewModel.startGame(width: gameWidth, height: gameHeight)
     }
 
     override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
+        // Clean up resources
+        viewModel = nil
     }
 
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-        // Any test you write for XCTest can be annotated as throws and async.
-        // Mark your test throws to produce an unexpected failure when your test encounters an uncaught error.
-        // Mark your test async to allow awaiting for asynchronous code to complete. Check the results with assertions afterwards.
+    func testSnakeMovesCorrectly() throws {
+        // Move the snake in a specific direction
+        viewModel.changeDirection(.right)
+        viewModel.moveSnake()
+        
+        // Assert that the snake's head moved one grid unit to the right
+        XCTAssertEqual(viewModel.snake.first?.position.x, gameWidth / 2 + gridSize)
+        XCTAssertEqual(viewModel.snake.first?.position.y, gameHeight / 2)
     }
 
-    func testPerformanceExample() throws {
-        // This is an example of a performance test case.
-        measure {
-            // Put the code you want to measure the time of here.
-        }
+    func testFoodGeneration() throws {
+        // Generate food
+        viewModel.generateFood()
+        
+        // Assert that the food is within the game boundaries
+        XCTAssertTrue(viewModel.food.position.x >= 0 && viewModel.food.position.x < gameWidth)
+        XCTAssertTrue(viewModel.food.position.y >= 0 && viewModel.food.position.y < gameHeight)
     }
 
+    func testGameRestart() throws {
+        // Restart the game
+        viewModel.restartGame()
+        
+        // Assert that the snake is at its initial position and the game is not over
+        XCTAssertEqual(viewModel.snake.count, 1)
+        XCTAssertEqual(viewModel.snake.first?.position, CGPoint(x: gameWidth / 2, y: gameHeight / 2))
+        XCTAssertFalse(viewModel.gameover)
+        XCTAssertEqual(viewModel.score, 0)
+    }
+    
+    func testSnakeCollisionDetection() throws {
+        // Move the snake to collide with itself
+        viewModel.snake = [SnakeSegment(position: CGPoint(x: gameWidth / 2, y: gameHeight / 2)),
+                           SnakeSegment(position: CGPoint(x: gameWidth / 2 + gridSize, y: gameHeight / 2))]
+        viewModel.changeDirection(.right)
+        viewModel.moveSnake()
+        
+        // Assert that the game is over
+        XCTAssertTrue(viewModel.gameover)
+    }
 }
