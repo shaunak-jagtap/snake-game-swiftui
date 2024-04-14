@@ -6,6 +6,8 @@
 //
 
 import SwiftUI
+import Combine
+
 // ViewModel to manage game logic
 @available(macOS 10.15, *)
 class SnakeGameViewModel: ObservableObject {
@@ -16,6 +18,7 @@ class SnakeGameViewModel: ObservableObject {
     @Published var gameWidth: CGFloat = 0
     @Published var gameHeight: CGFloat = 0
     @Published var direction: Direction = .right
+    @Published var foodEaten: Bool = false // Track whether food was eaten
     
     private var timer: Timer?
     
@@ -99,6 +102,7 @@ class SnakeGameViewModel: ObservableObject {
         let distance = sqrt(dx * dx + dy * dy)
         if distance < gridSize / 2 {
             score += 1
+            foodEaten = true // Set foodEaten to true when the snake eats the food
             generateFood()
             snake.insert(head, at: 0)
         } else {

@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+
 // Constants for game settings
 let gridSize: CGFloat = 20
 
@@ -18,7 +19,7 @@ enum Direction {
 @available(macOS 10.15, *)
 struct SnakeGameView: View {
     @StateObject var viewModel = SnakeGameViewModel()
-    
+
     var body: some View {
         GeometryReader { geometry in
             let calculatedGameWidth = geometry.size.width - 40
@@ -49,6 +50,18 @@ struct SnakeGameView: View {
                         .font(.system(size: 25)) // Increase the font size to make the food emoji bigger
                         .position(viewModel.food.position)
                     
+                    // Fireworks animation at the position of the food when eaten
+                    if viewModel.foodEaten {
+                        FireworksAnimation()
+                            .frame(width: 100, height: 100) // Adjust size as needed
+                            .position(viewModel.food.position)
+                            .onAppear {
+                                // Reset the foodEaten flag after a short delay to allow the fireworks animation to play
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                                    viewModel.foodEaten = false
+                                }
+                            }
+                    }
                 }
                 .gesture(
                     DragGesture()
