@@ -1,14 +1,6 @@
-//
-//  SnakeGameViewModel.swift
-//  Snake
-//
-//  Created by Shaunak Jagtap on 14/04/24.
-//
-
 import SwiftUI
 import Combine
 
-// ViewModel to manage game logic
 @available(macOS 10.15, *)
 class SnakeGameViewModel: ObservableObject {
     @Published var snake: [SnakeSegment] = []
@@ -18,9 +10,10 @@ class SnakeGameViewModel: ObservableObject {
     @Published var gameWidth: CGFloat = 0
     @Published var gameHeight: CGFloat = 0
     @Published var direction: Direction = .right
-    @Published var foodEaten: Bool = false // Track whether food was eaten
+    @Published var foodEaten: Bool = false
     
     private var timer: Timer?
+    private var gridSize: CGFloat = 20
     
     func startGame(width: CGFloat, height: CGFloat) {
         gameWidth = width
@@ -40,6 +33,7 @@ class SnakeGameViewModel: ObservableObject {
     
     func stopGame() {
         timer?.invalidate()
+        timer = nil // Avoid potential retain cycle
     }
     
     func handleSwipe(value: DragGesture.Value) {
@@ -63,15 +57,18 @@ class SnakeGameViewModel: ObservableObject {
     
     private func startTimer() {
         timer?.invalidate()
-        timer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { [weak self] _ in
+        let timerInterval = max(0.05, 0.2 - Double(score) * 0.015) // Decrease timer interval slightly with each food eaten
+        timer = Timer.scheduledTimer(withTimeInterval: timerInterval, repeats: true) { [weak self] _ in
             guard let self = self else { return }
             if !self.gameover {
                 self.moveSnake()
+                timer?.invalidate()
+                startTimer()
             }
         }
     }
     
-    public func moveSnake() {
+    func moveSnake() {
         guard !snake.isEmpty else {
             return
         }
@@ -90,8 +87,8 @@ class SnakeGameViewModel: ObservableObject {
             head.position.x += gridSize
         }
         
-        if head.position.x < 0 || head.position.x >= gameWidth ||
-           head.position.y < 0 || head.position.y >= gameHeight ||
+        if head.position.x < 20 || head.position.x >= gameWidth + 20 ||
+           head.position.y < 60 || head.position.y >= gameHeight + 60 ||
            snake.dropFirst().contains(where: { $0.position == head.position }) {
             endGame()
             return
@@ -102,7 +99,7 @@ class SnakeGameViewModel: ObservableObject {
         let distance = sqrt(dx * dx + dy * dy)
         if distance < gridSize / 2 {
             score += 1
-            foodEaten = true // Set foodEaten to true when the snake eats the food
+            foodEaten = true
             generateFood()
             snake.insert(head, at: 0)
         } else {
@@ -111,23 +108,22 @@ class SnakeGameViewModel: ObservableObject {
         }
     }
     
-    public func generateFood() {
-      var availablePositions = [(CGFloat, CGFloat)]()
-      for x in stride(from: gridSize, through: gameWidth - gridSize, by: gridSize) { // Start from gridSize to avoid border
-        for y in stride(from: gridSize, through: gameHeight - gridSize, by: gridSize) { // Start from gridSize to avoid border
-          let position = CGPoint(x: x, y: y)
-            if !snake.contains(where: { $0.position == position }) && position.x > gridSize && position.y > 100 {
-            availablePositions.append((x, y))
-          }
+    func generateFood() {
+        var availablePositions = [(CGFloat, CGFloat)]()
+        for x in stride(from: gridSize, through: gameWidth - gridSize, by: gridSize) {
+            for y in stride(from: gridSize, through: gameHeight - gridSize, by: gridSize) {
+                let position = CGPoint(x: x, y: y)
+                if !snake.contains(where: { $0.position == position }) && position.x > gridSize && position.y > 100 {
+                    availablePositions.append((x, y))
+                }
+            }
         }
-      }
-      
-      if let randomPosition = availablePositions.randomElement() {
-        food.position = CGPoint(x: randomPosition.0, y: randomPosition.1)
-      } else {
-        // Handle the case where no free positions are available (snake might fill most of the board)
-        print("No available positions for food!")
-      }
+        
+        if let randomPosition = availablePositions.randomElement() {
+            food.position = CGPoint(x: randomPosition.0, y: randomPosition.1)
+        } else {
+            print("No available positions for food!")
+        }
     }
 
     private func endGame() {

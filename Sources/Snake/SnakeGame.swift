@@ -9,6 +9,8 @@ import SwiftUI
 
 // Constants for game settings
 let gridSize: CGFloat = 20
+let horizontalPadding: CGFloat = 40
+let verticalPadding: CGFloat = 200
 
 // Enum representing directions
 enum Direction {
@@ -22,18 +24,17 @@ struct SnakeGameView: View {
 
     var body: some View {
         GeometryReader { geometry in
-            let calculatedGameWidth = geometry.size.width - 40
-            let calculatedGameHeight = geometry.size.height - 200
+            let calculatedGameWidth = geometry.size.width - horizontalPadding
+            let calculatedGameHeight = geometry.size.height - verticalPadding
             
             VStack {
-                
-                // Rest of your view hierarchy
                 ZStack {
                     // Game board
                     Rectangle()
                         .fill(Color.black)
-                        .frame(width: viewModel.gameWidth, height: viewModel.gameHeight)
+                        .frame(width: calculatedGameWidth, height: calculatedGameHeight)
                         .border(Color.white, width: 2)
+                        .clipped() // Avoid potential view clipping
                     
                     // Snake
                     ForEach(viewModel.snake, id: \.self) { segment in
@@ -45,8 +46,9 @@ struct SnakeGameView: View {
                     
                     // Food (replaced with rat emoji)
                     Text("🐀")
-                        .font(.system(size: 25)) // Increase the font size to make the food emoji bigger
+                        .font(.system(size: min(calculatedGameWidth, calculatedGameHeight) * 0.05)) // Dynamically adjust font size
                         .position(viewModel.food.position)
+                        .zIndex(1) // Ensure the food is on top of the snake
                     
                     // Fireworks animation at the position of the food when eaten
                     if viewModel.foodEaten {
@@ -65,6 +67,10 @@ struct SnakeGameView: View {
                     DragGesture()
                         .onEnded(viewModel.handleSwipe)
                 )
+                .onAppear {
+                    viewModel.startGame(width: calculatedGameWidth, height: calculatedGameHeight)
+                }
+                .onDisappear(perform: viewModel.stopGame)
                 
                 Button(action: viewModel.restartGame) {
                     Text("Restart")
@@ -73,17 +79,15 @@ struct SnakeGameView: View {
                         .background(Color.black)
                         .cornerRadius(10)
                 }
+                .padding() // Add padding for better spacing
                 
                 Text("Score: \(viewModel.score)")
                     .foregroundColor(.white)
                     .padding()
+                    .padding()
             }
             .background(Color.black)
             .edgesIgnoringSafeArea(.all)
-            .onAppear {
-                viewModel.startGame(width: calculatedGameWidth, height: calculatedGameHeight)
-            }
-            .onDisappear(perform: viewModel.stopGame)
         }
     }
 }
