@@ -26,10 +26,8 @@ struct SnakeGameView: View {
             let calculatedGameHeight = geometry.size.height - 200
             
             VStack {
-                Text("Score: \(viewModel.score)")
-                    .foregroundColor(.white)
-                    .padding()
                 
+                // Rest of your view hierarchy
                 ZStack {
                     // Game board
                     Rectangle()
@@ -75,6 +73,10 @@ struct SnakeGameView: View {
                         .background(Color.black)
                         .cornerRadius(10)
                 }
+                
+                Text("Score: \(viewModel.score)")
+                    .foregroundColor(.white)
+                    .padding()
             }
             .background(Color.black)
             .edgesIgnoringSafeArea(.all)
