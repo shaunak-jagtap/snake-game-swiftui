@@ -8,8 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		AA804AF72BCBDAE100E08942 /* SnakeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA804AF62BCBDAE100E08942 /* SnakeTests.swift */; };
+		AA804AFE2BCBDDBD00E08942 /* SnakeGame.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA804AFD2BCBDDBD00E08942 /* SnakeGame.swift */; };
+		AA804B002BCBDDF000E08942 /* SnakeGameViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA804AFF2BCBDDF000E08942 /* SnakeGameViewModel.swift */; };
+		AA804B022BCBDE3400E08942 /* SnakeSegment.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA804B012BCBDE3400E08942 /* SnakeSegment.swift */; };
 		AAA57D652BB24254008CD086 /* SnakeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA57D642BB24254008CD086 /* SnakeApp.swift */; };
-		AAA57D672BB24254008CD086 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA57D662BB24254008CD086 /* ContentView.swift */; };
 		AAA57D692BB24256008CD086 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AAA57D682BB24256008CD086 /* Assets.xcassets */; };
 		AAA57D6C2BB24256008CD086 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AAA57D6B2BB24256008CD086 /* Preview Assets.xcassets */; };
 /* End PBXBuildFile section */
@@ -27,9 +29,11 @@
 /* Begin PBXFileReference section */
 		AA804AF42BCBDAE100E08942 /* SnakeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SnakeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA804AF62BCBDAE100E08942 /* SnakeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnakeTests.swift; sourceTree = "<group>"; };
+		AA804AFD2BCBDDBD00E08942 /* SnakeGame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnakeGame.swift; sourceTree = "<group>"; };
+		AA804AFF2BCBDDF000E08942 /* SnakeGameViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnakeGameViewModel.swift; sourceTree = "<group>"; };
+		AA804B012BCBDE3400E08942 /* SnakeSegment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnakeSegment.swift; sourceTree = "<group>"; };
 		AAA57D612BB24254008CD086 /* Snake.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Snake.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AAA57D642BB24254008CD086 /* SnakeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnakeApp.swift; sourceTree = "<group>"; };
-		AAA57D662BB24254008CD086 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		AAA57D682BB24256008CD086 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		AAA57D6B2BB24256008CD086 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -82,9 +86,11 @@
 			isa = PBXGroup;
 			children = (
 				AAA57D642BB24254008CD086 /* SnakeApp.swift */,
-				AAA57D662BB24254008CD086 /* ContentView.swift */,
 				AAA57D682BB24256008CD086 /* Assets.xcassets */,
 				AAA57D6A2BB24256008CD086 /* Preview Content */,
+				AA804AFD2BCBDDBD00E08942 /* SnakeGame.swift */,
+				AA804AFF2BCBDDF000E08942 /* SnakeGameViewModel.swift */,
+				AA804B012BCBDE3400E08942 /* SnakeSegment.swift */,
 			);
 			path = Snake;
 			sourceTree = "<group>";
@@ -205,8 +211,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AAA57D672BB24254008CD086 /* ContentView.swift in Sources */,
+				AA804AFE2BCBDDBD00E08942 /* SnakeGame.swift in Sources */,
 				AAA57D652BB24254008CD086 /* SnakeApp.swift in Sources */,
+				AA804B002BCBDDF000E08942 /* SnakeGameViewModel.swift in Sources */,
+				AA804B022BCBDE3400E08942 /* SnakeSegment.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

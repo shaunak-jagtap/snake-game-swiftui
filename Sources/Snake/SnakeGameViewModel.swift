@@ -1,71 +1,11 @@
+//
+//  SnakeGameViewModel.swift
+//  Snake
+//
+//  Created by Shaunak Jagtap on 14/04/24.
+//
+
 import SwiftUI
-
-// Constants for game settings
-let gridSize: CGFloat = 20
-
-// Main view representing the game
-@available(macOS 10.15, *)
-struct SnakeGameView: View {
-    @StateObject var viewModel = SnakeGameViewModel()
-    
-    var body: some View {
-        GeometryReader { geometry in
-            let calculatedGameWidth = geometry.size.width - 40
-            let calculatedGameHeight = geometry.size.height - 200
-            
-            VStack {
-                Text("Score: \(viewModel.score)")
-                    .foregroundColor(.white)
-                    .padding()
-                
-                ZStack {
-                    // Game board
-                    Rectangle()
-                        .fill(Color.black)
-                        .frame(width: viewModel.gameWidth, height: viewModel.gameHeight)
-                        .border(Color.white, width: 2)
-                    
-                    // Snake
-                    ForEach(viewModel.snake, id: \.self) { segment in
-                        Rectangle()
-                            .fill(Color.white)
-                            .frame(width: gridSize, height: gridSize)
-                            .position(segment.position)
-                    }
-                    
-                    // Food (replaced with rat emoji)
-                    Text("🐀")
-                        .font(.system(size: 30)) // Increase the font size to make the food emoji bigger
-                        .position(viewModel.food.position)
-                    
-                    // Snake's eyes
-                    if let head = viewModel.snake.first {
-                        SnakeEyes(position: head.position, direction: viewModel.direction)
-                    }
-                }
-                .gesture(
-                    DragGesture()
-                        .onEnded(viewModel.handleSwipe)
-                )
-                
-                Button(action: viewModel.restartGame) {
-                    Text("Restart")
-                        .foregroundColor(.white)
-                        .padding()
-                        .background(Color.black)
-                        .cornerRadius(10)
-                }
-            }
-            .background(Color.black)
-            .edgesIgnoringSafeArea(.all)
-            .onAppear {
-                viewModel.startGame(width: calculatedGameWidth, height: calculatedGameHeight)
-            }
-            .onDisappear(perform: viewModel.stopGame)
-        }
-    }
-}
-
 // ViewModel to manage game logic
 @available(macOS 10.15, *)
 class SnakeGameViewModel: ObservableObject {
@@ -189,45 +129,5 @@ class SnakeGameViewModel: ObservableObject {
     private func endGame() {
         timer?.invalidate()
         gameover = true
-    }
-}
-
-// Model representing a segment of the snake
-@available(macOS 10.15, *)
-struct SnakeSegment: Hashable {
-    var position: CGPoint
-    
-    func hash(into hasher: inout Hasher) {
-        hasher.combine(position.x)
-        hasher.combine(position.y)
-    }
-    
-    static func ==(lhs: SnakeSegment, rhs: SnakeSegment) -> Bool {
-        return lhs.position == rhs.position
-    }
-}
-
-// Enum representing directions
-enum Direction {
-    case up, down, left, right
-}
-
-// View representing the snake's eyes
-@available(macOS 10.15, *)
-struct SnakeEyes: View {
-    var position: CGPoint
-    var direction: Direction
-    
-    var body: some View {
-        ZStack {
-            Circle()
-                .fill(Color.white)
-                .frame(width: 4, height: 4)
-                .position(position.applying(.init(translationX: direction == .left ? -5 : 5, y: -5)))
-            Circle()
-                .fill(Color.white)
-                .frame(width: 4, height: 4)
-                .position(position.applying(.init(translationX: direction == .left ? -5 : 5, y: 5)))
-        }
     }
 }
