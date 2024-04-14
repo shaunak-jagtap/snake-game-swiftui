@@ -9,53 +9,59 @@ struct SnakeGameView: View {
     @StateObject var viewModel = SnakeGameViewModel()
     @available(macOS 10.15, *)
     var body: some View {
-        VStack {
-            Text("Score: \(viewModel.score)")
-                .foregroundColor(.white)
-                .padding()
-            
-            ZStack {
-                // Game board
-                Rectangle()
-                    .fill(Color.black)
-                    .frame(width: viewModel.gameWidth, height: viewModel.gameHeight)
-                    .border(Color.white, width: 2)
-                
-                // Snake
-                ForEach(viewModel.snake, id: \.self) { segment in
-                    Rectangle()
-                        .fill(Color.white)
-                        .frame(width: gridSize, height: gridSize)
-                        .position(segment.position)
-                }
-                
-                // Food (replaced with rat emoji)
-                Text("🐀")
-                    .font(.system(size: 30)) // Increase the font size to make the food emoji bigger
-                    .position(viewModel.food.position)
-                
-                // Snake's eyes
-                if let head = viewModel.snake.first {
-                    SnakeEyes(position: head.position, direction: viewModel.direction)
-                }
-            }
-            .gesture(
-                DragGesture()
-                    .onEnded(viewModel.handleSwipe)
-            )
-            
-            Button(action: viewModel.restartGame) {
-                Text("Restart")
+        GeometryReader { geometry in
+            let calculatedGameWidth = geometry.size.width - 40
+            let calculatedGameHeight = geometry.size.height - 200
+            VStack {
+                Text("Score: \(viewModel.score)")
                     .foregroundColor(.white)
                     .padding()
-                    .background(Color.black)
-                    .cornerRadius(10)
+                
+                ZStack {
+                    // Game board
+                    Rectangle()
+                        .fill(Color.black)
+                        .frame(width: viewModel.gameWidth, height: viewModel.gameHeight)
+                        .border(Color.white, width: 2)
+                    
+                    // Snake
+                    ForEach(viewModel.snake, id: \.self) { segment in
+                        Rectangle()
+                            .fill(Color.white)
+                            .frame(width: gridSize, height: gridSize)
+                            .position(segment.position)
+                    }
+                    
+                    // Food (replaced with rat emoji)
+                    Text("🐀")
+                        .font(.system(size: 30)) // Increase the font size to make the food emoji bigger
+                        .position(viewModel.food.position)
+                    
+                    // Snake's eyes
+                    if let head = viewModel.snake.first {
+                        SnakeEyes(position: head.position, direction: viewModel.direction)
+                    }
+                }
+                .gesture(
+                    DragGesture()
+                        .onEnded(viewModel.handleSwipe)
+                )
+                
+                Button(action: viewModel.restartGame) {
+                    Text("Restart")
+                        .foregroundColor(.white)
+                        .padding()
+                        .background(Color.black)
+                        .cornerRadius(10)
+                }
             }
+            .background(Color.black)
+            .edgesIgnoringSafeArea(.all)
+            .onAppear {
+                viewModel.startGame(width: calculatedGameWidth, height: calculatedGameHeight)
+            }
+            .onDisappear(perform: viewModel.stopGame)
         }
-        .background(Color.black)
-        .edgesIgnoringSafeArea(.all)
-        .onAppear(perform: viewModel.startGame)
-        .onDisappear(perform: viewModel.stopGame)
     }
 }
 
@@ -72,12 +78,9 @@ class SnakeGameViewModel: ObservableObject {
     
     private var timer: Timer?
     
-    init() {
-        self.gameWidth = UIScreen.main.bounds.width - 40
-        self.gameHeight = UIScreen.main.bounds.height - 200
-    }
-    
-    func startGame() {
+    func startGame(width: CGFloat, height: CGFloat) {
+        gameWidth = width
+        gameHeight = height
         snake = [SnakeSegment(position: CGPoint(x: gameWidth / 2, y: gameHeight / 2))]
         generateFood()
         startTimer()
@@ -88,7 +91,7 @@ class SnakeGameViewModel: ObservableObject {
         gameover = false
         score = 0
         snake.removeAll()
-        startGame()
+        startGame(width: gameWidth, height: gameHeight)
     }
     
     func stopGame() {
